@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
-class Basicinfo extends Model
+class Patient extends Model
 {
     use HasFactory, softDeletes;
 
-    protected $table = "basicinfos";
+    protected $table = "patient_infos";
 
     protected $fillable = [
-        'id',
         'fname',
         'lname',
         'mname',
@@ -24,29 +24,20 @@ class Basicinfo extends Model
         'nationality',
         'birthday',
         'cellphone',
-        'occupation',
+        'patient_occupation',
         'company_school',
         'status',
-        'is_minor',
-        'parentinfos_id',
+
+        'parent_fname',
+        'parent_lname',
+        'relation',
+        'parent_occupation',
+
         'created_at',
         'updated_at',
         'updated_by',
         'deleted_at'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
     ];
+
 }

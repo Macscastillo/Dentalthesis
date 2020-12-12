@@ -5,15 +5,43 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
-class Medical3info extends Model
+class Medical_History extends Model
 {
     use HasFactory, softDeletes;
 
-    protected $table = "medical3infos";
+    protected $table = "medicalhistory_infos";
 
     protected $fillable = [
-        'id',
+        'patient_infos_id',
+        'doc_name',
+        'specialty',
+        'office_address',
+        'office_number',
+        'q1',
+        'q2',
+        'sq2',
+        'q3',
+        'sq3',
+        'q4',
+        'sq4',
+        'q5',
+        'sq5',
+        'q6',
+        'q7',
+        'is_local_anesthetic',
+        'is_sulfa_drugs',
+        'is_aspirin',
+        'is_latex',
+        'is_antibiotics',
+        'q9',
+        'is_pregnant',
+        'is_nursing',
+        'is_taking_bc',
+        'q11',
+        'q12',
+
         'is_high_blood_pressure',
         'is_Low_blood_pressure',
         'is_epilepsy',
@@ -48,9 +76,11 @@ class Medical3info extends Model
         'is_blood_disease',
         'is_head_injuries',
         'is_arthristis_rheumatism',
+
         'created_at',
         'updated_at',
         'updated_by',
         'deleted_at'
     ];
+
 }

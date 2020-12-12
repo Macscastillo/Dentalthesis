@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Basicinfos extends Migration
+class PatientInfos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class Basicinfos extends Migration
      */
     public function up()
     {
-        Schema::create('basicinfos', function (Blueprint $table) {
+        Schema::create('patient_infos', function (Blueprint $table) {
             $table->id();
             $table->string('fname');
             $table->string('lname');
@@ -25,10 +25,17 @@ class Basicinfos extends Migration
             $table->string('nationality');
             $table->string('birthday');
             $table->string('cellphone');
-            $table->string('occupation');
+            $table->string('patient_occupation');
             $table->string('company_school');
             $table->string('status');
-            $table->boolean('is_minor')->default(0);
+
+
+            $table->string('parent_fname');
+            $table->string('parent_lname');
+            $table->string('relation');
+            $table->string('parent_occupation'); 
+
+
             $table->timestamps();
             $table->bigInteger('updated_by')->nullable();
             $table->softDeletes();
@@ -42,6 +49,6 @@ class Basicinfos extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('basicinfos');
+        Schema::dropIfExists('patient_infos');
     }
 }

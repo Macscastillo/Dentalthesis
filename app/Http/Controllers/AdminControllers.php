@@ -8,6 +8,8 @@ use App\Models\Branch;
 use App\Models\Doctor;
 use App\Models\Service;
 use App\Models\Appointment;
+use App\Models\Medical_History;
+use App\Models\Patient;
 use Validator;
 use Auth;
 use Hash;
@@ -81,23 +83,50 @@ class AdminControllers extends Controller
         }
     }
 }
+
+    //View queue appointments
     public function getAppointments(Request $request){
-
-        $query = Appointment::getAppointment($request);
-
-        if($query){
-            return response()->json([
-                'message'   => "Appointments",
-                'data'      => $query
-            ],200);
-        }else{
-            return response()->json([
-                'response'  =>false,
-                'message'   =>"Something is worng"
-            ],200);
-        } 
+        
+        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+            $query = Appointment::getAppointment($request);
+            if($query){
+                return response()->json([
+                    'message'   => "Appointments",
+                    'data'      => $query
+                ],200);
+            }else{
+                return response()->json([
+                    'response'  =>false,
+                    'message'   =>"Something is worng"
+                ],200);
+            } 
+        }
     }
 
+    public function updateAppointmentstatus(Request $request){
+
+        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+            $update = DB::table('appointments')
+                ->where('id','=', $request->id)
+                ->update(['is_booked' => 1]);
+
+            if($update){
+                return response()->json([
+                    'response'  => true,
+                    'message'   => "Appointment is booked",
+                ]);
+            }else{
+                return response()->json([
+                    'response'  => false,
+                    'message'   => "Something is wrong",
+                    'data'      => []
+                ], 200);
+            }
+    
+        }        
+    }
+
+    //View all Booked 
     public function bookedAppointments(Request $request){
 
         $query = Appointment::bookedAppointment($request);
@@ -115,9 +144,21 @@ class AdminControllers extends Controller
         }
     }
 
+    //Drop down Services
+    public function services(Request $request){
+        
+        $query = Service::service($request);
+
+        return response()->json([
+            'reposnse'  =>true,
+            'data'      => $query
+        ]);
+
+    }
+
     public function addPatient(Request $request){
 
-        $validation = Validator::make($request->all(),[
+        $validation = validator::make($request->all(),[
             'fname'                             => 'required|string',
             'lname'                             => 'required|string',
             'mname'                             => 'required|string',
@@ -128,27 +169,36 @@ class AdminControllers extends Controller
             'nationality'                       => 'required|string',
             'birthday'                          => 'required|date_format:M/d/Y',
             'cellphone'                         => 'required|numeric',
-            'occupation'                        => 'required|string',
+            'patient_occupation'                => 'required|string',
             'company_school'                    => 'required|string',
             'status'                            => 'required|string',
-            'is_minor'                          => 'boolean',
-
-            'local_anesthetic'                  => 'boolean',
-            'sulfa_drugs'                       => 'boolean',
-            'aspirin'                           => 'boolean',
-            'antibiotics'                       => 'boolean',
-            'latex'                             => 'boolean',
-            'others'                            => 'string',
-
-            'is_pregnant'                       => 'boolean',
-            'is_nursing'                        => 'boolean',
-            'is_taking_bc'                      => 'boolean',
-
-            'lname'                             => 'string',
-            'fname'                             => 'string',
+            'parent_lname'                      => 'string',
+            'parent_fname'                      => 'string',
             'relation'                          => 'string',
-            'occupation'                        => 'string',
-
+            'parent_occupation'                 => 'string',
+            
+            'doc_name'                          => 'string',
+            'specialty'                         => 'string',
+            'office_address'                    => 'string',
+            'office_number'                     => 'string',
+            'q1'                                => 'boolean',
+            'q2'                                => 'boolean',
+            'sq2'                               => 'string',
+            'q3'                                => 'boolean',
+            'sq3'                               => 'string',
+            'q4'                                => 'boolean',
+            'sq4'                               => 'string',
+            'q5'                                => 'boolean',
+            'sq5'                               => 'string',
+            'q6'                                => 'boolean',
+            'q7'                                => 'boolean',
+            'is_local_anesthetic'               => 'boolean',
+            'is_sulfa_drugs'                    => 'boolean',
+            'is_aspirin'                        => 'boolean',
+            'is_latex'                          => 'boolean',
+            'is_antibiotics'                    => 'boolean',
+            'q11'                               => 'boolean',
+            'q12'                               => 'boolean',
             'is_high_blood_pressure'            => 'boolean',
             'is_Low_blood_pressure'             => 'boolean',
             'is_epilepsy'                       => 'boolean',
@@ -182,31 +232,9 @@ class AdminControllers extends Controller
             'is_bleeding_problems'              => 'boolean',
             'is_blood_disease'                  => 'boolean',
             'is_head_injuries'                  => 'boolean',
-            'is_arthristis_rheumatism'          => 'boolean',
-
-            'doc_name'                          => 'string',
-            'specialty'                         => 'string',
-            'office_address'                    => 'string',
-            'office_number'                     => 'string',
-            'q1'                                => 'boolean',
-            'q2'                                => 'boolean',
-            'sq2'                               => 'string',
-            'q3'                                => 'boolean',
-            'sq3'                               => 'string',
-            'q4'                                => 'boolean',
-            'sq4'                               => 'string',
-            'q5'                                => 'boolean',
-            'sq5'                               => 'string',
-            'q6'                                => 'boolean',
-            'q7'                                => 'boolean',
-            'med2infos_id'                      => 'string',
-            'pregnants_id'                      => 'string',
-            'q11'                               => 'boolean',
-            'q12'                               => 'boolean',
-            'med3infos_id'                      => 'string',
-
+            'is_arthristis_rheumatism'          => 'boolean'
         ]);
-        
+
         if($validation->fails()){
             $error = $validation->messages()->first();
                 return response()->json([
@@ -215,146 +243,176 @@ class AdminControllers extends Controller
                 ]);
         }
 
-        $basicinfo = DB::table('basicinfos')
-            ->insert([
-                'fname'             => $request->fname,
-                'lname'             => $request->lname,
-                'mname'             => $request->mname,
-                'nickname'          => $request->nickname,
-                'address'           => $request->address,
-                'sex'               => $request->sex,
-                'age'               => $request->age,
-                'nationality'       => $request->nationality,
-                'birthday'          => $request->birthday,
-                'cellphone'         => $request->cellphone,
-                'occupation'        => $request->occupation,
-                'company_school'    => $request->company_school,
-                'status'            => $request->status,
-            ]);
-       
-        $basicinfolastId = DB::table('basicinfos')
-            ->select(LAST_INSERT_ID())->get();
+        $firstform = DB::table('patient_infos')
+        ->insertGetId([
+            'fname'                 => $request->fname,
+            'lname'                 => $request->lname,
+            'mname'                 => $request->mname,
+            'nickname'              => $request->nickname,
+            'address'               => $request->address,
+            'sex'                   => $request->sex,
+            'age'                   => $request->age,
+            'nationality'           => $request->nationality,
+            'birthday'              => $request->birthday,
+            'cellphone'             => $request->cellphone,
+            'patient_occupation'    => $request->patient_occupation,
+            'company_school'        => $request->company_school,
+            'status'                => $request->status,
+            'parent_fname'          => $request->parent_fname,
+            'parent_lname'          => $request->parent_lname,
+            'relation'              => $request->relation,
+            'parent_occupation'     => $request->parent_occupation
+        ]);
 
-        $medicalinfo2 = DB::table('medical2infos')
-            ->insert([
-                'basicinfos_id'     => $request->$lastId,
-                'local_anesthetic'  => $request->local_anesthetic,
-                'sulfa_drugs'       => $request->sulfa_drugs,
-                'aspirin'           => $request->aspirin,
-                'antibiotics'       => $request->antibiotics,
-                'latex'             => $request->latex,
-                'others'            => $request->others
-            ]);
+        $secondform = DB::table('medicalhistory_infos')
+        ->insert([
+            'patient_infos_id'              => $firstform,
+            'doc_name'                      => $request->doc_name,
+            'specialty'                     => $request->specialty,
+            'office_address'                => $request->office_address,
+            'office_number'                 => $request->office_number,
+            'q1'                            => $request->q1,
+            'q2'                            => $request->q2,
+            'sq2'                           => $request->sq2,
+            'q3'                            => $request->q3,
+            'sq3'                           => $request->sq3,
+            'q4'                            => $request->q4,
+            'sq4'                           => $request->sq4,
+            'q5'                            => $request->q5,
+            'sq5'                           => $request->sq5,
+            'q6'                            => $request->q6,
+            'q7'                            => $request->q7,
+            'is_local_anesthetic'           => $request->is_local_anesthetic,
+            'is_sulfa_drugs'                => $request->is_sulfa_drugs,
+            'is_aspirin'                    => $request->is_aspirin,
+            'is_latex'                      => $request->is_latex,
+            'is_antibiotics'                => $request->is_antibiotics,
+            'q9'                            => $request->q9,
+            'q11'                           => $request->q11,
+            'q12'                           => $request->q12,
 
-        $medicalinfo2lastId = DB::table('medical2infos')
-            ->select(LAST_INSERT_ID())->get();
+            'is_high_blood_pressure'        => $request->is_high_blood_pressure,
+            'is_Low_blood_pressure'         => $request->is_Low_blood_pressure,
+            'is_epilepsy'                   => $request->is_epilepsy,
+            'is_aid_hiv_infection'          => $request->is_aid_hiv_infection,
+            'is_std'                        => $request->is_std,
+            'is_fainting_seizure'           => $request->is_fainting_seizure,
+            'is_rapid_weight_loss'          => $request->is_rapid_weight_loss,
+            'is_radiation_therapht'         => $request->is_radiation_therapht,
+            'is_joint_replacement_implant'  => $request->is_joint_replacement_implant,
+            'is_heart_surgery'              => $request->is_heart_surgery,
+            'is_heart_attack'               => $request->is_heart_attack,
+            'is_thyroid_problem'            => $request->is_thyroid_problem,
+            'is_heart_desease'              => $request->is_heart_desease,
+            'is_heart_murmur'               => $request->is_heart_murmur,
+            'is_hepatitis_liver_disease'    => $request->is_hepatitis_liver_disease,
+            'is_rheumatic_fever'            => $request->is_rheumatic_fever,
+            'is_allergies'                  => $request->is_allergies,
+            'is_respiratory_problems'       => $request->is_respiratory_problems,
+            'is_hepatitis_jaundice'         => $request->is_hepatitis_jaundice,
+            'is_tuberculosis'               => $request->is_tuberculosis,
+            'is_swollen_ankles'             => $request->is_swollen_ankles,
+            'is_kidney_disease'             => $request->is_kidney_disease,
+            'is_diabetes'                   => $request->is_diabetes,
+            'is_chest_pain'                 => $request->is_chest_pain,
+            'is_stroke'                     => $request->is_stroke,
+            'is_cancer_tumors'              => $request->is_cancer_tumors,
+            'is_anemia'                     => $request->is_anemia,
+            'is_angina'                     => $request->is_angina,
+            'is_asthma'                     => $request->is_asthma,
+            'is_emphysema'                  => $request->is_emphysema,
+            'is_bleeding_problems'          => $request->is_bleeding_problems,
+            'is_blood_disease'              => $request->is_blood_disease,
+            'is_head_injuries'              => $request->is_head_injuries,
+            'is_arthristis_rheumatism'      => $request->is_arthristis_rheumatism
+        ]);
 
-        $pregnant = DB::table('pregnants')
-            ->insert([
-                'basicinfos_id'     => $request->$lastId,
-                'is_pregnant'       => $request->is_pregnant,
-                'is_nursing'        => $request->is_nursing,
-                'is_taking_bc'      => $request->is_taking_bc
-            ]);
-
-        $pregnantlastId = DB::table('pregnants')
-            ->select(LAST_INSERT_ID())->get();
-
-        $parentinfo = DB::table('pregnants')
-            ->insert([
-                'basicinfos_id' => $request->$lastId,
-                'fname'         => $request->fname,
-                'lname'         => $request->lname,
-                'relation'      => $request->relation,
-                'occupation'    => $request->occupation
-            ]);
-
-        $parentlastId = DB::table('parentinfos')
-            ->select(LAST_INSERT_ID())->get();
-
-        $medicalinfo3 = DB::table('medical3infos')
-            ->insert([
-                'basicinfos_id'                 => $request->$lastId,
-                'is_high_blood_pressure'        => $request->is_high_blood_pressure,
-                'is_Low_blood_pressure'         => $request->is_Low_blood_pressure,
-                'is_epilepsy'                   => $request->is_epilepsy,
-                'is_aid_hiv_infection'          => $request->is_aid_hiv_infection,
-                'is_std'                        => $request->is_std,
-                'is_fainting_seizure'           => $request->is_fainting_seizure,
-                'is_rapid_weight_loss'          => $request->is_rapid_weight_loss,
-                'is_radiation_therapht'         => $request->is_radiation_therapht,
-                'is_joint_replacement_implant'  => $request->is_joint_replacement_implant,
-                'is_heart_surgery'              => $request->is_heart_surgery,
-                'is_heart_attack'               => $request->is_heart_attack,
-                'is_thyroid_problem'            => $request->is_thyroid_problem,
-                'is_heart_desease'              => $request->is_heart_desease,
-                'is_heart_murmur'               => $request->is_heart_murmur,
-                'is_hepatitis_liver_disease'    => $request->is_hepatitis_liver_disease,
-                'is_rheumatic_fever'            => $request->is_rheumatic_fever,
-                'is_allergies'                  => $request->is_allergies,
-                'is_respiratory_problems'       => $request->is_respiratory_problems,
-                'is_hepatitis_jaundice'         => $request->is_hepatitis_jaundice,
-                'is_tuberculosis'               => $request->is_tuberculosis,
-                'is_swollen_ankles'             => $request->is_swollen_ankles,
-                'is_kidney_disease'             => $request->is_kidney_disease,
-                'is_diabetes'                   => $request->is_diabetes,
-                'is_chest_pain'                 => $request->is_chest_pain,
-                'is_stroke'                     => $request->is_stroke,
-                'is_cancer_tumors'              => $request->is_cancer_tumors,
-                'is_anemia'                     => $request->is_anemia,
-                'is_angina'                     => $request->is_angina,
-                'is_asthma'                     => $request->is_asthma,
-                'is_emphysema'                  => $request->is_emphysema,
-                'is_bleeding_problems'          => $request->is_bleeding_problems,
-                'is_blood_disease'              => $request->is_blood_disease,
-                'is_head_injuries'              => $request->is_head_injuries,
-                'is_arthristis_rheumatism'      => $request->is_arthristis_rheumatism,
-                 
-            ]);
-
-            $medicalinfo3lastId = DB::table('medical3infos')
-            ->select(LAST_INSERT_ID())-get();
-                
-        $medicalinfo = DB::table('medicalinfos')
-            ->insert([
-                'basicinfos_id'     => $request->$lastId,
-                'parentinfos_id'    => $request->$parentlastId,
-                'doc_name'          => $request->doc_name,
-                'specialty'         => $request->specialty,
-                'office_address'    => $request->office_address,
-                'office_number'     => $request->office_number,
-                'q1'                => $request->q1,
-                'q2'                => $request->q2,
-                'sq2'               => $request->sq2,
-                'q3'                => $request->q3,
-                'sq3'               => $request->sq3,
-                'q4'                => $request->q4,
-                'sq4'               => $request->sq4,
-                'q5'                => $request->q5,
-                'sq5'               => $request->sq5,
-                'q6'                => $request->q6,
-                'q7'                => $request->q7,
-                'med2infos_id'      => $request->$med2lastid,
-                'pregnants_id'      => $request->$pregnantlastid,
-                'q11'               => $request->$q11,
-                'q12'               => $request->$q12,
-                'med3infos_id'      => $request->$med3lastid
-            ]);
-
-            
-
-            if($data){
+            if (true){
                 return response()->json([
                     'response'  => true,
-                    'message'   => 'Patient added'
+                    'message'   => "Patient Added"
                 ],200);
             }else{
                 return response()->json([
                     'response'  => false,
-                    'message'   => 'Something is wrong'
-                ],200);
+                    'message'   => "Something is wrong"
+                ]);
             }
+    }
 
+    public function ShowPatient(Request $request){
+
+        return $showpatient = DB::table('medicalhistory_infos as mh')
+            ->select('patient.fname as First name',
+            'patient.mname as Middle name',
+            'patient.lname as Last name',
+            'patient.nickname as Nickname',
+            'patient.address as Address',
+            'patient.sex as Sex',
+            'patient.nationality as Nationality',
+            'patient.birthday as Birthday',
+            'patient.cellphone as Cellphone number',
+            'patient.patient_occupation as Occupation',
+            'patient.company_school as Company/School',
+            'patient.status as Status',
+            DB::raw("CONCAT(patient.parent_fname,' ',patient.parent_lname) as Name"),
+            'patient.relation as Relation',
+            'patient.parent_occupation as p.Occupation', 
+            'mh.doc_name as Doctor Name',
+            'mh.specialty as Specialty',
+            'mh.office_address as Office Address',
+            'mh.office_number as Office Number',
+            'mh.q1 as Question 1',
+            'mh.q2 as Question 2',
+            'mh.sq2 as Sub Question 2',
+            'mh.q3 as Question 3',
+            'mh.sq3 as Sub Question 3',
+            'mh.q4 as Question 4',
+            'mh.sq4 as Sub Question 4',
+            'mh.q5 as Question 5',
+            'mh.sq5 as Sub Question 5',
+            'mh.q6 as Question 6',
+            'mh.q7 as Question 7',
+            'mh.q9 as Question 9',
+            'mh.q11 as Question 11',
+            'mh.q12 as Question 12',
+            'mh.is_high_blood_pressure as High Blood Pressure',
+            'mh.is_Low_blood_pressure as Low Blood Pressure',
+            'mh.is_epilepsy as Epilepsy',
+            'mh.is_aid_hiv_infection as AIDS/HIV infection',
+            'mh.is_std as Sexually Transmitted Disease',
+            'mh.is_fainting_seizure as Fainting Seizure',
+            'mh.is_rapid_weight_loss as Rapid Weight Loss',
+            'mh.is_radiation_therapht as Radiation Theraphy',
+            'mh.is_joint_replacement_implant as Joint Replacement Implant',
+            'mh.is_heart_surgery as Heart Surgery',
+            'mh.is_heart_attack as Heart Attack',
+            'mh.is_thyroid_problem as Thyroid Problem',
+            'mh.is_heart_desease as Heart Disease',
+            'mh.is_heart_murmur as Heart Murmur',
+            'mh.is_hepatitis_liver_disease as Hepatitis/Liver Disease',
+            'mh.is_rheumatic_fever as Rheumatic Fever',
+            'mh.is_allergies as Allergies',
+            'mh.is_respiratory_problems as Respiratory Problems',
+            'mh.is_hepatitis_jaundice as Hepatitis/Jaundice',
+            'mh.is_tuberculosis as Tuberculosis',
+            'mh.is_swollen_ankles as Swollen Ankles',
+            'mh.is_kidney_disease as Kidney Disease',
+            'mh.is_diabetes as Diabetes',
+            'mh.is_chest_pain as Chest pain',
+            'mh.is_stroke as Stroke',
+            'mh.is_cancer_tumors as Cancer/Tumors',
+            'mh.is_anemia as Anemia',
+            'mh.is_angina as Angina',
+            'mh.is_asthma as Asthma',
+            'mh.is_emphysema as Emphysema',
+            'mh.is_bleeding_problems as Bleeding Problems',
+            'mh.is_blood_disease as Blood Disease',
+            'mh.is_head_injuries as Head Injuries',
+            'mh.is_arthristis_rheumatism as Arthritis/Rheumatism')
+            ->join('patient_infos as patient', 'mh.patient_infos_id','=','patient.id')
+            ->where('patient.id','=', $request->id)
+            ->get();
     }
     
 }
