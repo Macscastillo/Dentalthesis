@@ -31,4 +31,14 @@ class DropdownControllers extends Controller
         ]);
     
     }
+
+    public function branches(Request $request){
+
+        $query = Branch::branch($request);
+        
+        return response()->json([
+            'response'  => true,
+            'data'      => $query
+        ]);
+    }
 }

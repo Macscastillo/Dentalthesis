@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 class Branch extends Model
 {
@@ -17,4 +18,10 @@ class Branch extends Model
         'updated_by',
         'deleted_at'
     ];
+
+    public static function branch($data){
+        return $branches = DB::table('branches')
+            ->select('branches.id', 'branches.name')
+            ->get();
+    }
 }

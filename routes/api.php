@@ -27,6 +27,7 @@ Route::get('Patient/{id}', [AdminControllers::class, 'ShowPatient'])->middleware
 //Drop downs
 Route::get('Services', [DropdownControllers::class, 'services']);
 Route::get('Doctors', [DropdownControllers::class, 'doctors']);
+Route::get('Branches', [DropdownControllers::class, 'branches']);
 
 
 
