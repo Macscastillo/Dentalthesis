@@ -103,17 +103,35 @@ class AdminControllers extends Controller
         }
     }
 
+    //appointment is good
     public function updateAppointmentstatus(Request $request){
 
         if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
-            $update = DB::table('appointments')
-                ->where('id','=', $request->id)
-                ->update(['is_booked' => 1]);
-
-            if($update){
+            $query = Appointment::appointmentStatus($request);
+            if($query){
                 return response()->json([
                     'response'  => true,
-                    'message'   => "Appointment is booked",
+                    'message'   => "Appointment is booked"
+                ]);
+            }else{
+                return response()->json([
+                    'response'  => false,
+                    'message'   => "Something is wrong",
+                    'data'      => []
+                ], 200);
+            }
+    
+        }        
+    }
+    //cancel appointment
+    public function cancelAppointmentstatus(Request $request){
+
+        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+            $query = Appointment::statusCancelled($request);
+            if($query){
+                return response()->json([
+                    'response'  => true,
+                    'message'   => "Appointment is canceled",
                 ]);
             }else{
                 return response()->json([
@@ -129,18 +147,20 @@ class AdminControllers extends Controller
     //View all Booked 
     public function bookedAppointments(Request $request){
 
-        $query = Appointment::bookedAppointment($request);
+        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+            $query = Appointment::bookedAppointment($request);
 
-        if($query){
-            return response()->json([
-                'response'  =>true,
-                'data'      =>$query
-            ],200);
-        }else{
-            return response()->json([
-                'response'  =>false,
-                'message'   =>"Something is wrong"
-            ],200);
+            if($query){
+                return response()->json([
+                    'response'  =>true,
+                    'data'      =>$query
+                ],200);
+            }else{
+                return response()->json([
+                    'response'  =>false,
+                    'message'   =>"Something is wrong"
+                ],200);
+            }
         }
     }
 
@@ -158,6 +178,7 @@ class AdminControllers extends Controller
 
     public function addPatient(Request $request){
 
+        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
         $validation = validator::make($request->all(),[
             'fname'                             => 'required|string',
             'lname'                             => 'required|string',
@@ -338,11 +359,13 @@ class AdminControllers extends Controller
                     'message'   => "Something is wrong"
                 ]);
             }
+        }
     }
 
     public function ShowPatient(Request $request){
 
-        return $showpatient = DB::table('medicalhistory_infos as mh')
+        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+            return $showpatient = DB::table('medicalhistory_infos as mh')
             ->select('patient.fname as First name',
             'patient.mname as Middle name',
             'patient.lname as Last name',
@@ -357,7 +380,8 @@ class AdminControllers extends Controller
             'patient.status as Status',
             DB::raw("CONCAT(patient.parent_fname,' ',patient.parent_lname) as Name"),
             'patient.relation as Relation',
-            'patient.parent_occupation as p.Occupation', 
+            'patient.parent_occupation as p.Occupation',
+
             'mh.doc_name as Doctor Name',
             'mh.specialty as Specialty',
             'mh.office_address as Office Address',
@@ -376,6 +400,7 @@ class AdminControllers extends Controller
             'mh.q9 as Question 9',
             'mh.q11 as Question 11',
             'mh.q12 as Question 12',
+
             'mh.is_high_blood_pressure as High Blood Pressure',
             'mh.is_Low_blood_pressure as Low Blood Pressure',
             'mh.is_epilepsy as Epilepsy',
@@ -413,6 +438,7 @@ class AdminControllers extends Controller
             ->join('patient_infos as patient', 'mh.patient_infos_id','=','patient.id')
             ->where('patient.id','=', $request->id)
             ->get();
+        }
     }
     
 }
