@@ -12,6 +12,11 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run(){
-        
+        $this->call([ServiceSeeder::class,
+        			BranchSeeder::class,
+        			DoctorSeeder::class,
+        			PositionSeeder::class
+        		]);
+       
     }
 }

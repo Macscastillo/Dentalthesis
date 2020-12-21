@@ -14,17 +14,12 @@ class ServiceSeeder extends Seeder
      */
     public function run()
     {
-       DB::table('services')->insert([
-           ['name'  => 'Orthodontics'],
-           ['name'  => 'Endodontics'],
-           ['name'  => 'Prosthodontics'],
-           ['name'  => 'Oral Prophylaxis'],
-           ['name'  => 'Dental X-ray Service and Diagnostics'],
-           ['name'  => 'Teeth Whitening'],
-           ['name'  => 'Dental Implantology'],
-           ['name'  => 'Oral Surgery'],
-           ['name'  => 'Restorative Dentistry'],
-           ['name'  => 'Dental Crown bridges and Veneers']
-       ]); 
+       //DB::table('services')->insert([
+        
+           $services1 = DB::table ('services')->insert (['name' => 'Orthodontics'
+         ]);
+           $services2 = DB::table ('services')->insert (['name' => 'Endodontics'
+         ]);
+      
     }
 }
