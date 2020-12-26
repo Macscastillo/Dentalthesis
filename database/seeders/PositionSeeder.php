@@ -19,5 +19,12 @@ class PositionSeeder extends Seeder
             ['name' => 'Doctor'],
             ['name' => 'Admin']
         ]);
+
+         $position1 = DB::table ('positions')->insert (['name' => 'Owner'
+         ]);
+           $position2 = DB::table ('positions')->insert (['name' => 'Admin'
+         ]);
+             $position3 = DB::table ('positions')->insert (['name' => 'Doctor'
+         ]);
     }
 }
