@@ -14,13 +14,13 @@ class Users extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('fname');
             $table->string('lname');
             $table->string('email');
             $table->string('password');
 
-            $table->foreignId('positions_id');
+            $table->foreignId('positions_id')->unsigned();
             $table->foreign('positions_id')->references('id')->on('positions');
 
             $table->foreignId('branches_id');

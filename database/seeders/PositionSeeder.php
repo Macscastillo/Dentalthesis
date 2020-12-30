@@ -14,12 +14,6 @@ class PositionSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('positions')->insert([
-            ['name' => 'Owner'],
-            ['name' => 'Doctor'],
-            ['name' => 'Admin']
-        ]);
-
          $position1 = DB::table ('positions')->insert (['name' => 'Owner'
          ]);
            $position2 = DB::table ('positions')->insert (['name' => 'Admin'

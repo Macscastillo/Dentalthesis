@@ -14,7 +14,7 @@ class Positions extends Migration
     public function up()
     {
         Schema::create('positions', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('name');
             $table->timestamps();
             $table->bigInteger('updated_by')->nullable();

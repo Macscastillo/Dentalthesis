@@ -14,13 +14,13 @@ class Bookings extends Migration
     public function up()
     {
         Schema::create('bookings', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('fname');
             $table->string('lname');
             $table->string('date');
             $table->string('time');
 
-            $table->foreignId('services_id');
+            $table->foreignId('services_id')->unsigned();
             $table->foreign('services_id')->references('id')->on('services');
 
             $table->timestamps();

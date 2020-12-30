@@ -14,9 +14,13 @@ class BranchSeeder extends Seeder
      */
     public function run()
     {
-       DB::table('branches')->insert([
-           ['name'  => 'Makati'],
-           ['name'  => 'Manila']
+       $branch1 = DB::table('branches')->insert([
+           'name'  => 'Makati'
+
+       ]);
+
+       $branch2 = DB::table('branches')->insert([
+           'name'  => 'Pateros'
        ]);
     }
 }

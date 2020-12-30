@@ -13,9 +13,11 @@ class Service extends Model
 
    protected $table = "services";
    
-     public static function service($data){
-         return $services = DB::table('services')
-          ->select('services.id','services.name')
+     public static function getservice($data){
+         return $services = DB::connection('mysql')
+          ->table('services')
+          ->select('services.id',
+          	'services.name')
           ->get();
      }
 

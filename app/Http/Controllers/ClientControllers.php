@@ -15,11 +15,14 @@ class ClientControllers extends Controller
             'lname'         => 'required|string',
             'email'         => 'required|email',
             'contact'       => 'required|numeric|unique:appointments',
-            'branches_id'   => 'required|string',
-            'doctors_id'    => 'required|string',
-            'services_id'   => 'required|string',
-            'date'          => 'required|date_format:m-d-Y',
-            'time'          => 'required|date_format:h:i',
+            'branches_id'   => 'required|exists:branches,id',
+            'doctors_id'    => 'required|exists:doctors,id',
+            'services_id'   => 'required|exists:services,id',
+            // 'branches_id'   => 'required',
+            // 'doctors_id'    => 'required',
+            // 'services_id'   => 'required',
+            'date'          => 'required|date_format:Y-m-d',
+            'time'          => 'required|date_format:H:i',
         ]);
 
         if ($validation->fails()){

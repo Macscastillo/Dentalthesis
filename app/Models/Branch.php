@@ -19,9 +19,12 @@ class Branch extends Model
         'deleted_at'
     ];
 
-    public static function branch($data){
-        return $branches = DB::table('branches')
-            ->select('branches.id', 'branches.name')
-            ->get();
+    public static function getbranch($data){
+        return $branches = DB::connection('mysql')
+            ->table('branches')
+            ->select(
+                'branches.id', 
+                'branches.name'
+            )->get();
     }
 }

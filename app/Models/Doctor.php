@@ -22,10 +22,11 @@ class Doctor extends Model
         'deleted_at'
     ];
 
-    public static function doctor($data){ 
-        return $doctors = DB::table('users')
-            ->select('users.id', DB::raw("CONCAT(users.fname,' ',users.lname) as Name"))
-            ->where('positions_id','=',2)
+    public static function getdoctors($data){ 
+        return $doctors = DB::connection('mysql')
+            ->table('doctors')
+            ->select('doctors.id',
+                'doctors.name')
             ->get();
     }
 }

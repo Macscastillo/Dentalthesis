@@ -20,13 +20,13 @@ class Appointments extends Migration
             $table->string('email');
             $table->string('contact');
 
-            $table->foreignId('branches_id');
+            $table->bigInteger('branches_id')->unsigned();
             $table->foreign('branches_id')->references('id')->on('branches');
             
-            $table->foreignId('doctors_id');
+            $table->bigInteger('doctors_id')->unsigned();
             $table->foreign('doctors_id')->references('id')->on('doctors');
 
-            $table->foreignId('services_id');
+            $table->bigInteger('services_id')->unsigned() ;
             $table->foreign('services_id')->references('id')->on('services');
 
             $table->string('date');

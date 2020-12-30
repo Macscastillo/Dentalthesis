@@ -12,31 +12,50 @@ class DropdownControllers extends Controller
 {
     public function services(Request $request){
         
-        $query = Service::service($request);
+        $query = Service::getservice($request);
+        if(sizeof($query) > 0){
+            $dataservice = [];
+            foreach($query as $out){
+                $dataservice = $out->id;
+            }
+        }
     
         return response()->json([
             'reposnse'  =>true,
             'data'      => $query
-        ]);
+        ],200);
     
     }
     
     public function doctors(Request $request){
         
-        $query = Doctor::doctor($request);
+        $query = Doctor::getdoctors($request);
+        if(sizeof($query) > 0){
+            $datadocors = [];
+            foreach($query as $out){
+                $datadoctors = $out->id;
+            }
+        }
     
         return response()->json([
             'reposnse'  =>true,
             'data'      => $query
-        ]);
+        ],200);
     
     }
 
     public function branches(Request $request){
 
-        $query = Branch::branch($request);
+        $query = Branch::getbranch($request);
+
+        if(sizeof($query) > 0){
+            $databranch = [];
+            foreach($query as $out){
+                $databranch = $out->id;
+            }
+        }
         
-        return response()->json([
+        return response()->json([   
             'response'  => true,
             'data'      => $query
         ]);
