@@ -16,7 +16,7 @@ class MedicalhistoryInfos extends Migration
         Schema::create('medicalhistory_infos', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('patient_infos_id');
+            $table->bigInteger('patient_infos_id')->unsigned();
             $table->foreign('patient_infos_id')->references('id')->on('patient_infos');
 
             $table->string('doc_name')->nullable();

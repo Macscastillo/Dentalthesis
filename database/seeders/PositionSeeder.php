@@ -14,11 +14,13 @@ class PositionSeeder extends Seeder
      */
     public function run()
     {
-         $position1 = DB::table ('positions')->insert (['name' => 'Owner'
-         ]);
-           $position2 = DB::table ('positions')->insert (['name' => 'Admin'
-         ]);
-             $position3 = DB::table ('positions')->insert (['name' => 'Doctor'
-         ]);
+         $position1 = DB::table ('positions')
+          ->insert (['name' => 'Owner']);
+
+        $position2 = DB::table ('positions')
+          ->insert (['name' => 'Admin']);
+
+        $position3 = DB::table ('positions')
+          ->insert (['name' => 'Doctor']);
     }
 }

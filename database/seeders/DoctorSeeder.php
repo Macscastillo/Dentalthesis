@@ -14,11 +14,13 @@ class DoctorSeeder extends Seeder
      */
     public function run()
     {
-         $doctor1 = DB::table ('doctors')->insert (['name' => 'Doc. Razel Len Roldan'
-         ]);
-           $doctor2 = DB::table ('doctors')->insert (['name' => 'Doc. Trixia Mae Cervantes'
-         ]);
-             $doctor3 = DB::table ('doctors')->insert (['name' => 'Doc. Michelle James Krial'
-         ]);
+      $doctor1 = DB::table ('doctors')
+      ->insert(['name' => 'Doc. Razel Len Roldan']);
+
+      $doctor2 = DB::table ('doctors')
+      ->insert(['name' => 'Doc. Trixia Mae Cervantes']);
+
+      $doctor3 = DB::table ('doctors')
+      ->insert(['name' => 'Doc. Michelle James Krial']);
     }
 }

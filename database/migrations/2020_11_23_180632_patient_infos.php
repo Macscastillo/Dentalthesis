@@ -14,6 +14,7 @@ class PatientInfos extends Migration
     public function up()
     {
         Schema::create('patient_infos', function (Blueprint $table) {
+            
             $table->id();
             $table->string('fname');
             $table->string('lname');

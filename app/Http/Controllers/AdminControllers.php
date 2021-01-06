@@ -14,6 +14,7 @@ use Validator;
 use Auth;
 use Hash;
 use DB;
+use Carbon\Carbon;
 
 class AdminControllers extends Controller
 {
@@ -42,7 +43,7 @@ class AdminControllers extends Controller
     }
 
     public function addUser(Request $request){
-        if(Auth::user()->positions_id == 1){
+        //if(Auth::user()->positions_id == 1){
         $validation = Validator::make($request->all(),[
             'fname'         => 'required|string',
             'lname'         => 'required|string',
@@ -81,7 +82,7 @@ class AdminControllers extends Controller
             ]);
 
         }
-    }
+    //}
 }
 
     //View queue appointments
@@ -440,5 +441,230 @@ class AdminControllers extends Controller
             ->get();
         }
     }
+
+    public function updatePatient(Request $request){
+        
+        if(Auth::user()->positions_id == 1){
+            
+            $now = Carbon::now('Asia/Manila');
+
+            $firstform = DB::table('patient_infos as patient')
+            ->update([
+                'fname'                 => $request->fname,
+                'lname'                 => $request->lname,
+                'mname'                 => $request->mname,
+                'nickname'              => $request->nickname,
+                'address'               => $request->address,
+                'sex'                   => $request->sex,
+                'age'                   => $request->age,
+                'nationality'           => $request->nationality,
+                'birthday'              => $request->birthday,
+                'cellphone'             => $request->cellphone,
+                'patient_occupation'    => $request->patient_occupation,
+                'company_school'        => $request->company_school,
+                'status'                => $request->status,
+                'parent_fname'          => $request->parent_fname,
+                'parent_lname'          => $request->parent_lname,
+                'relation'              => $request->relation,
+                'parent_occupation'     => $request->parent_occupation,
+                'patient.updated_at'    => $now,
+                'patient.updated_by'    => Auth::user()->id
+            ]);
+
+            $secondform = DB::table('medicalhistory_infos as mh')
+            ->update([
+                'doc_name'                      => $request->doc_name,
+                'specialty'                     => $request->specialty,
+                'office_address'                => $request->office_address,
+                'office_number'                 => $request->office_number,
+                'q1'                            => $request->q1,
+                'q2'                            => $request->q2,
+                'sq2'                           => $request->sq2,
+                'q3'                            => $request->q3,
+                'sq3'                           => $request->sq3,
+                'q4'                            => $request->q4,
+                'sq4'                           => $request->sq4,
+                'q5'                            => $request->q5,
+                'sq5'                           => $request->sq5,
+                'q6'                            => $request->q6,
+                'q7'                            => $request->q7,
+                'is_local_anesthetic'           => $request->is_local_anesthetic,
+                'is_sulfa_drugs'                => $request->is_sulfa_drugs,
+                'is_aspirin'                    => $request->is_aspirin,
+                'is_latex'                      => $request->is_latex,
+                'is_antibiotics'                => $request->is_antibiotics,
+                'q9'                            => $request->q9,
+                'q11'                           => $request->q11,
+                'q12'                           => $request->q12,
+
+                'is_high_blood_pressure'        => $request->is_high_blood_pressure,
+                'is_Low_blood_pressure'         => $request->is_Low_blood_pressure,
+                'is_epilepsy'                   => $request->is_epilepsy,
+                'is_aid_hiv_infection'          => $request->is_aid_hiv_infection,
+                'is_std'                        => $request->is_std,
+                'is_fainting_seizure'           => $request->is_fainting_seizure,
+                'is_rapid_weight_loss'          => $request->is_rapid_weight_loss,
+                'is_radiation_therapht'         => $request->is_radiation_therapht,
+                'is_joint_replacement_implant'  => $request->is_joint_replacement_implant,
+                'is_heart_surgery'              => $request->is_heart_surgery,
+                'is_heart_attack'               => $request->is_heart_attack,
+                'is_thyroid_problem'            => $request->is_thyroid_problem,
+                'is_heart_desease'              => $request->is_heart_desease,
+                'is_heart_murmur'               => $request->is_heart_murmur,
+                'is_hepatitis_liver_disease'    => $request->is_hepatitis_liver_disease,
+                'is_rheumatic_fever'            => $request->is_rheumatic_fever,
+                'is_allergies'                  => $request->is_allergies,
+                'is_respiratory_problems'       => $request->is_respiratory_problems,
+                'is_hepatitis_jaundice'         => $request->is_hepatitis_jaundice,
+                'is_tuberculosis'               => $request->is_tuberculosis,
+                'is_swollen_ankles'             => $request->is_swollen_ankles,
+                'is_kidney_disease'             => $request->is_kidney_disease,
+                'is_diabetes'                   => $request->is_diabetes,
+                'is_chest_pain'                 => $request->is_chest_pain,
+                'is_stroke'                     => $request->is_stroke,
+                'is_cancer_tumors'              => $request->is_cancer_tumors,
+                'is_anemia'                     => $request->is_anemia,
+                'is_angina'                     => $request->is_angina,
+                'is_asthma'                     => $request->is_asthma,
+                'is_emphysema'                  => $request->is_emphysema,
+                'is_bleeding_problems'          => $request->is_bleeding_problems,
+                'is_blood_disease'              => $request->is_blood_disease,
+                'is_head_injuries'              => $request->is_head_injuries,
+                'is_arthristis_rheumatism'      => $request->is_arthristis_rheumatism,
+                'mh.updated_at'                 => $now,
+                'mh.updated_by'                 => Auth::user()->id
+            ]);
+
+            if(true){
+                return response()->json([
+                    'response'  => true,
+                    'message'   => 'Patient record successfully updated'
+                ]);
+            }else{
+                return response()->json([
+                    'response'  => false,
+                    'message'   => 'Something is wrong'
+                ]);
+            }
+        }
+    }
+
+    public function newDentalrecord (Request $request, $id){
+
+        $now = Carbon::now('Asia/Manila');
+
+        $previousbalance = DB::connection('mysql')
+        ->table('medical_records as mr')
+        ->select('mr.patient_id', 'mr.balance')
+        ->where('patient_id','=', $request->id)
+        ->latest()
+        ->get();
+
+        $newbalance = DB::table('services')
+        ->select('price')
+        ->where('id','=', $request->services_id)
+        ->get();
+
+        if(sizeof($previousbalance) == 0){
+
+            $balance = (0 + $newbalance[0]->price - $request->paid);
+
+            $insertnewrecord = DB::table('medical_records')
+            ->insert([
+                'patient_id'    => $id,
+                'teeths_id'     => $request->teeths_id,
+                'services_id'   => $request->services_id,
+                'amount'        => $newbalance[0]->price,
+                'paid'          => $request->paid,
+                'balance'       => $balance,
+                'created_at'    => $now
+            ]);
+
+            if($insertnewrecord){
+                return response()->json([
+                    'response'  => true,
+                    'message'   => "New record has been added",
+                    'total'     => $balance
+                ]);
+            }else{
+                return response()->json([
+                    'response'  => false,
+                    'message'   => "Something is wrong"
+                ]);
+            }
+        }else{
+        
+        $newbalance = DB::table('services')
+        ->select('price')
+        ->where('id','=', $request->services_id)
+        ->get();
+
+            $balance = ($previousbalance[0]->balance + $newbalance[0]->price - $request->paid);
+
+            $insertnewrecord = DB::table('medical_records')
+            ->insert([
+                'patient_id'    => $id,
+                'teeths_id'     => $request->teeths_id,
+                'services_id'   => $request->services_id,
+                'amount'        => $newbalance[0]->price,
+                'paid'          => $request->paid,
+                'balance'       => $balance,
+                'created_at'    => $now
+            ]);
+
+            if($insertnewrecord){
+                return response()->json([
+                    'response'  => true,
+                    'message'   => "New record has been added",
+                    'total'     => $balance
+                ]);
+            }else{
+                return response()->json([
+                    'response'  => false,
+                    'message'   => "Something is wrong"
+                ]);
+            }
+        }
+    }
+
+    public function dentalRecord (Request $request, $id){
+
+        $now = Carbon::now('Asia/Manila');
+
+        $previousbalance = DB::connection('mysql')
+        ->table('medical_records as mr')
+        ->select('mr.patient_id', 'mr.balance')
+        ->where('patient_id', $request->id)
+        ->latest()
+        ->get();
+  
+        
+        $balance = ($previousbalance[0]->balance - $request->paid);
+
+        $insertdentalrecord = DB::table('medical_records')
+        ->insert([
+            'patient_id'    => $id,
+            'teeths_id'     => $request->teeths_id,
+            'services_id'   => $request->services_id,
+            'amount'        => $previousbalance[0]->balance,
+            'paid'          => $request->paid,
+            'balance'       => $balance,
+            'created_at'    => $now
+        ]);
+        
+        if($insertdentalrecord){
+            return response()->json([
+                'response'          => true,
+                'message'           => 'Dental record successfully updated',
+                'total balance'     => $balance
+            ]);
+        }else{
+            return response()->json([
+                'response'  => false,
+                'message'   => 'Something is wrong'
+            ]);
+        }
+        }
+    }
     
-}
+
