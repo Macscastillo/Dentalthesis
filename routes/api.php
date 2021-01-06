@@ -32,6 +32,7 @@ Route::post('Patient/{id}/existrecord', [AdminControllers::class, 'dentalRecord'
 Route::get('Services', [DropdownControllers::class, 'services']);
 Route::get('Doctors', [DropdownControllers::class, 'doctors']);
 Route::get('Branches', [DropdownControllers::class, 'branches']);
+Route::get('Positions', [DropdownControllers::class, 'positions']);
 
 
 

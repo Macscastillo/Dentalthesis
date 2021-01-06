@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 class Position extends Model
 {
@@ -20,4 +21,13 @@ class Position extends Model
         'updated_by',
         'deleted_at'
     ];
+
+    public static function getpositions($data){
+        return $postion = DB::connection('mysql')
+            ->table('positions')
+            ->select( 
+                'positions.id',
+                'positions.name'
+            )->get();
+    }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\Doctor;
 use App\Models\Service;
+use App\Models\Position;
 use DB;
 
 class DropdownControllers extends Controller
@@ -60,4 +61,22 @@ class DropdownControllers extends Controller
             'data'      => $query
         ]);
     }
+
+    public function positions(Request $request){
+
+        $query = Position::getpositions($request);
+
+        if(sizeof($query) > 0){
+            $datapos = [];
+            foreach($query as $out){
+                $datapos = $out->id;
+            }
+        }
+        
+        return response()->json([   
+            'response'  => true,
+            'data'      => $query
+        ]);
+    }
 }
+
