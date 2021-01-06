@@ -47,6 +47,8 @@ class AdminControllers extends Controller
         $validation = Validator::make($request->all(),[
             'fname'         => 'required|string',
             'lname'         => 'required|string',
+            'midname'       => 'required|string',
+            'school'        => 'required|string',
             'email'         => 'required|email|unique:users',
             'password'      => 'required|string',
             'positions_id'  => 'required|string',
@@ -64,6 +66,8 @@ class AdminControllers extends Controller
         $insertUser = User::create([
             'fname'         => $request->fname,
             'lname'         => $request->lname,
+            'midname'       => $request->midname,
+            'school'        => $request->school,
             'email'         => $request->email,
             'password'      => Hash::make($request->password),
             'positions_id'  => $request->positions_id,

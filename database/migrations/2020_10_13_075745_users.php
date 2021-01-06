@@ -20,7 +20,6 @@ class Users extends Migration
             $table->string('midname');
             $table->string('school');
             $table->string('email');
-            $table->string('username');
             $table->string('password');
 
             $table->foreignId('positions_id')->unsigned();
