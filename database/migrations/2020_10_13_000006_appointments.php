@@ -32,6 +32,8 @@ class Appointments extends Migration
             $table->string('date');
             $table->string('time');
 
+            $table->string('code')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->boolean('is_booked')->default(0);
             $table->boolean('is_cancelled')->default(0);
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nexmo;
 use DB;
 use Auth;
 
@@ -23,8 +24,10 @@ class Appointment extends Model
         'branches_id',
         'doctors_id',
         'services_id',
+        'code',
         'date',
         'time',
+        'is_active',
         'is_booked',
         'is_cancelled',
         'created_at',
@@ -52,6 +55,7 @@ class Appointment extends Model
         ->join('branches as branch', 'appointment.branches_id', '=', 'branch.id')
         ->join('doctors as doctor', 'appointment.doctors_id', '=', 'doctor.id')
         ->join('services as service', 'appointment.services_id', '=', 'service.id')
+        ->where('is_active',1)
         ->get();
     }
 

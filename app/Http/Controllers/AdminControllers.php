@@ -15,6 +15,7 @@ use Auth;
 use Hash;
 use DB;
 use Carbon\Carbon;
+use Nexmo;
 
 class AdminControllers extends Controller
 {
@@ -112,12 +113,23 @@ class AdminControllers extends Controller
     public function updateAppointmentstatus(Request $request){
 
         if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+
             $query = Appointment::appointmentStatus($request);
-            if($query){
+
+            // if($query){
+                
+            //     Nexmo::message()->send([
+            //         'to'   => $contact[0]->contact,
+            //         'from' => '+639217215984',
+            //         'text' => 'Your appointment request is approved'
+            
+            //     ]);
+
                 return response()->json([
                     'response'  => true,
                     'message'   => "Appointment is booked"
                 ]);
+
             }else{
                 return response()->json([
                     'response'  => false,
@@ -127,7 +139,7 @@ class AdminControllers extends Controller
             }
     
         }        
-    }
+    
     //cancel appointment
     public function cancelAppointmentstatus(Request $request){
 

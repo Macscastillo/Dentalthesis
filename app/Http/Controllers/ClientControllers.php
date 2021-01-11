@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use Validator;
+use DB;
 
 class ClientControllers extends Controller
 {
@@ -14,14 +15,11 @@ class ClientControllers extends Controller
             'fname'         => 'required|string',
             'lname'         => 'required|string',
             'email'         => 'required|email',
-            'contact'       => 'required|numeric|unique:appointments',
+            'contact'       => 'required|numeric',
             'branches_id'   => 'required|exists:branches,id',
             'doctors_id'    => 'required|exists:doctors,id',
             'services_id'   => 'required|exists:services,id',
-            // 'branches_id'   => 'required',
-            // 'doctors_id'    => 'required',
-            // 'services_id'   => 'required',
-            'date'          => 'required|date_format:Y-m-d',
+            'date'          => 'required|date_format:d-m-Y',
             'time'          => 'required|date_format:H:i',
         ]);
 
@@ -33,6 +31,8 @@ class ClientControllers extends Controller
             ]);
         }
 
+        $code = rand(1111,9999);
+
         $insertClient = Appointment::create([
             'fname'         => $request->fname,
             'lname'         => $request->lname,
@@ -43,7 +43,7 @@ class ClientControllers extends Controller
             'services_id'   => $request->services_id,
             'date'          => $request->date,
             'time'          => $request->time,
-            
+            'code'          => $code
         ]);
 
         if($insertClient){
@@ -58,5 +58,42 @@ class ClientControllers extends Controller
                 'message'  => "Fail"
             ],200);
         }
+    }
+
+    public function verificationCode(Request $request){
+
+        if($request->code != ""){
+        $verifycode = DB::table('appointments')
+        ->where('code','=', $request->code )->exists();
+
+            if($verifycode){
+                $activate = DB::table('appointments')
+                ->where('code','=', $request->code)
+                ->update(['is_active' => 1, 'code' => null]);
+
+                if($activate){
+                    return response()->json([
+                        'response' => true,
+                        'message'  => "Verification confirmed"
+                    ]);
+                }else{
+                    return response()->json([
+                        'response'  => false,
+                        'message'   => "Something is wrong"
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'response'  => false,
+                    'message'   => "Wrong verification code"
+                ]);
+            }
+        }else{
+            return response()->json([
+                'response'  => false,
+                'message'   => "Submit your verification code"
+            ]);
+        }
+
     }
 }
