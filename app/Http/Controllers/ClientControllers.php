@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use App\Models\Appointment;
+use Carbon\Carbon;
 use Validator;
 use DB;
+use Nexmo;
 
 class ClientControllers extends Controller
 {
@@ -15,12 +18,12 @@ class ClientControllers extends Controller
             'fname'         => 'required|string',
             'lname'         => 'required|string',
             'email'         => 'required|email',
-            'contact'       => 'required|numeric',
+            'contact'       => 'required|numeric|unique:appointments',
             'branches_id'   => 'required|exists:branches,id',
             'doctors_id'    => 'required|exists:doctors,id',
             'services_id'   => 'required|exists:services,id',
             'date'          => 'required|date_format:d-m-Y',
-            'time'          => 'required|date_format:H:i',
+            'time'          => 'required|date_format:g:i A',
         ]);
 
         if ($validation->fails()){
@@ -33,6 +36,24 @@ class ClientControllers extends Controller
 
         $code = rand(1111,9999);
 
+        $now = Carbon::now('Asia/Manila');
+        $hrs = Carbon::now('Asia/Manila')->addHours(2);
+        $today = Carbon::today('Asia/Manila');
+        $preftime = $request->time;
+        $prefdate = $request->date;
+        
+    
+        if($preftime <= $hrs || $preftime <= $now){
+            return response()->json([
+                'response'  => false,
+                'message'   => "Prefered time must be ahead of 2 hours before the appointment"
+            ]);
+        }elseif($prefdate < $today){
+            return response()->json([
+                'response'  => false,
+                'message'   => "Prefered date not valid"
+            ]);
+        }else{    
         $insertClient = Appointment::create([
             'fname'         => $request->fname,
             'lname'         => $request->lname,
@@ -41,12 +62,21 @@ class ClientControllers extends Controller
             'branches_id'   => $request->branches_id,
             'doctors_id'    => $request->doctors_id,
             'services_id'   => $request->services_id,
-            'date'          => $request->date,
-            'time'          => $request->time,
+            'date'          => $prefdate,
+            'time'          => $preftime,
             'code'          => $code
         ]);
+        }
 
         if($insertClient){
+
+                // Nexmo::message()->send([
+                //     'to'   => '+639217215984',
+                //     'from' => '+639217215984',
+                //     'text' => 'Your verification code is:'. $code
+            
+                // ]);
+
             return response()->json([
                 'response' => true,
                 'message'  => "Success"
@@ -69,7 +99,7 @@ class ClientControllers extends Controller
             if($verifycode){
                 $activate = DB::table('appointments')
                 ->where('code','=', $request->code)
-                ->update(['is_active' => 1, 'code' => null]);
+                ->update(['is_active' => 1, 'code' => null, 'contact' => 0]);
 
                 if($activate){
                     return response()->json([

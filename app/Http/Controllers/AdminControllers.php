@@ -93,7 +93,7 @@ class AdminControllers extends Controller
     //View queue appointments
     public function getAppointments(Request $request){
         
-        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+        //if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
             $query = Appointment::getAppointment($request);
             if($query){
                 return response()->json([
@@ -107,7 +107,7 @@ class AdminControllers extends Controller
                 ],200);
             } 
         }
-    }
+    //}
 
     //appointment is good
     public function updateAppointmentstatus(Request $request){
