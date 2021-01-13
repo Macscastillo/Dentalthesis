@@ -41,6 +41,7 @@ class Appointment extends Model
 
         return $getAppointments = DB::table('appointments as appointment')
         ->select(
+            'appointment.id',
             DB::raw("CONCAT(appointment.fname,' ',appointment.lname) as Name"),
             'appointment.email as Email',
             'appointment.contact as Contact',
@@ -63,15 +64,21 @@ class Appointment extends Model
 
         return $update = DB::table('appointments')
                 ->where('id','=', $data->id)
-                ->update(['is_booked' => 1, 'is_cancelled' => 0, 
-                'updated_by' => Auth::user()->id]);
+                ->update([
+                    'is_booked'     => 1, 
+                    'is_cancelled'  => 0, 
+                    'is_active'     => 0, 
+                    'updated_by'    => Auth::user()->id]);
     }
 
     public static function statusCancelled ($data){
         return $update = DB::table('appointments')
                 ->where('id','=', $data->id)
-                ->update(['is_cancelled' => 1, 'is_booked' => 0, 
-                'updated_by' => Auth::user()->id]);
+                ->update([
+                    'is_cancelled'  => 1, 
+                    'is_booked'     => 0,
+                    'is_active'     => 0, 
+                    'updated_by'    => Auth::user()->id]);
                 
     }
 

@@ -14,6 +14,7 @@ class ClientControllers extends Controller
 {
     //
     public function setAppointment(Request $request){
+        
         $validation = Validator::make($request->all(), [
             'fname'         => 'required|string',
             'lname'         => 'required|string',
@@ -22,7 +23,7 @@ class ClientControllers extends Controller
             'branches_id'   => 'required|exists:branches,id',
             'doctors_id'    => 'required|exists:doctors,id',
             'services_id'   => 'required|exists:services,id',
-            'date'          => 'required|date_format:d-m-Y',
+            'date'          => 'required|date_format:Y-m-d',
             'time'          => 'required|date_format:g:i A',
         ]);
 
@@ -38,17 +39,17 @@ class ClientControllers extends Controller
 
         $now = Carbon::now('Asia/Manila');
         $hrs = Carbon::now('Asia/Manila')->addHours(2);
-        $today = Carbon::today('Asia/Manila');
+        $today = Carbon::today();
         $preftime = $request->time;
         $prefdate = $request->date;
         
     
-        if($preftime <= $hrs || $preftime <= $now){
+        if($preftime <= $hrs && $preftime <= $now){
             return response()->json([
                 'response'  => false,
                 'message'   => "Prefered time must be ahead of 2 hours before the appointment"
             ]);
-        }elseif($prefdate < $today){
+        }if($prefdate < $today){
             return response()->json([
                 'response'  => false,
                 'message'   => "Prefered date not valid"
@@ -62,7 +63,7 @@ class ClientControllers extends Controller
             'branches_id'   => $request->branches_id,
             'doctors_id'    => $request->doctors_id,
             'services_id'   => $request->services_id,
-            'date'          => $prefdate,
+            'date'          => $request->date,
             'time'          => $preftime,
             'code'          => $code
         ]);

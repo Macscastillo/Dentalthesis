@@ -112,7 +112,7 @@ class AdminControllers extends Controller
     //appointment is good
     public function updateAppointmentstatus(Request $request){
 
-        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+        //if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
 
             $query = Appointment::appointmentStatus($request);
 
@@ -130,20 +130,20 @@ class AdminControllers extends Controller
                     'message'   => "Appointment is booked"
                 ]);
 
-            }else{
+            //}else{
                 return response()->json([
                     'response'  => false,
                     'message'   => "Something is wrong",
                     'data'      => []
                 ], 200);
-            }
+            //}
     
         }        
     
     //cancel appointment
     public function cancelAppointmentstatus(Request $request){
 
-        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+        //if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
             $query = Appointment::statusCancelled($request);
             if($query){
                 return response()->json([
@@ -158,13 +158,13 @@ class AdminControllers extends Controller
                 ], 200);
             }
     
-        }        
+        //}        
     }
 
     //View all Booked 
     public function bookedAppointments(Request $request){
 
-        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+        //if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
             $query = Appointment::bookedAppointment($request);
 
             if($query){
@@ -178,7 +178,7 @@ class AdminControllers extends Controller
                     'message'   =>"Something is wrong"
                 ],200);
             }
-        }
+        //}
     }
 
     //Drop down Services
@@ -195,7 +195,7 @@ class AdminControllers extends Controller
 
     public function addPatient(Request $request){
 
-        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+        //if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
         $validation = validator::make($request->all(),[
             'fname'                             => 'required|string',
             'lname'                             => 'required|string',
@@ -376,12 +376,12 @@ class AdminControllers extends Controller
                     'message'   => "Something is wrong"
                 ]);
             }
-        }
+        //}
     }
 
     public function ShowPatient(Request $request){
 
-        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
+        //if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2){
             return $showpatient = DB::table('medicalhistory_infos as mh')
             ->select('patient.fname as First name',
             'patient.mname as Middle name',
@@ -455,7 +455,7 @@ class AdminControllers extends Controller
             ->join('patient_infos as patient', 'mh.patient_infos_id','=','patient.id')
             ->where('patient.id','=', $request->id)
             ->get();
-        }
+        //}
     }
 
     public function updatePatient(Request $request){
@@ -681,6 +681,85 @@ class AdminControllers extends Controller
             ]);
         }
         }
-    }
+
+        public function ShowAllPatient(){
+
+            return $showpatient = DB::table('medicalhistory_infos as mh')
+            ->select(
+            'patient.id',
+            'patient.fname as First name',
+            'patient.mname as Middle name',
+            'patient.lname as Last name',
+            'patient.nickname as Nickname',
+            'patient.address as Address',
+            'patient.sex as Sex',
+            'patient.nationality as Nationality',
+            'patient.birthday as Birthday',
+            'patient.cellphone as Cellphone number',
+            'patient.patient_occupation as Occupation',
+            'patient.company_school as Company/School',
+            'patient.status as Status',
+            DB::raw("CONCAT(patient.parent_fname,' ',patient.parent_lname) as Name"),
+            'patient.relation as Relation',
+            'patient.parent_occupation as p.Occupation',
+
+            'mh.doc_name as Doctor Name',
+            'mh.specialty as Specialty',
+            'mh.office_address as Office Address',
+            'mh.office_number as Office Number',
+            'mh.q1 as Question 1',
+            'mh.q2 as Question 2',
+            'mh.sq2 as Sub Question 2',
+            'mh.q3 as Question 3',
+            'mh.sq3 as Sub Question 3',
+            'mh.q4 as Question 4',
+            'mh.sq4 as Sub Question 4',
+            'mh.q5 as Question 5',
+            'mh.sq5 as Sub Question 5',
+            'mh.q6 as Question 6',
+            'mh.q7 as Question 7',
+            'mh.q9 as Question 9',
+            'mh.q11 as Question 11',
+            'mh.q12 as Question 12',
+
+            'mh.is_high_blood_pressure as High Blood Pressure',
+            'mh.is_Low_blood_pressure as Low Blood Pressure',
+            'mh.is_epilepsy as Epilepsy',
+            'mh.is_aid_hiv_infection as AIDS/HIV infection',
+            'mh.is_std as Sexually Transmitted Disease',
+            'mh.is_fainting_seizure as Fainting Seizure',
+            'mh.is_rapid_weight_loss as Rapid Weight Loss',
+            'mh.is_radiation_therapht as Radiation Theraphy',
+            'mh.is_joint_replacement_implant as Joint Replacement Implant',
+            'mh.is_heart_surgery as Heart Surgery',
+            'mh.is_heart_attack as Heart Attack',
+            'mh.is_thyroid_problem as Thyroid Problem',
+            'mh.is_heart_desease as Heart Disease',
+            'mh.is_heart_murmur as Heart Murmur',
+            'mh.is_hepatitis_liver_disease as Hepatitis/Liver Disease',
+            'mh.is_rheumatic_fever as Rheumatic Fever',
+            'mh.is_allergies as Allergies',
+            'mh.is_respiratory_problems as Respiratory Problems',
+            'mh.is_hepatitis_jaundice as Hepatitis/Jaundice',
+            'mh.is_tuberculosis as Tuberculosis',
+            'mh.is_swollen_ankles as Swollen Ankles',
+            'mh.is_kidney_disease as Kidney Disease',
+            'mh.is_diabetes as Diabetes',
+            'mh.is_chest_pain as Chest pain',
+            'mh.is_stroke as Stroke',
+            'mh.is_cancer_tumors as Cancer/Tumors',
+            'mh.is_anemia as Anemia',
+            'mh.is_angina as Angina',
+            'mh.is_asthma as Asthma',
+            'mh.is_emphysema as Emphysema',
+            'mh.is_bleeding_problems as Bleeding Problems',
+            'mh.is_blood_disease as Blood Disease',
+            'mh.is_head_injuries as Head Injuries',
+            'mh.is_arthristis_rheumatism as Arthritis/Rheumatism')
+            ->join('patient_infos as patient', 'mh.patient_infos_id','=','patient.id')
+            ->get();
+        }
+        }
+    
     
 
