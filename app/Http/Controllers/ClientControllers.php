@@ -19,7 +19,7 @@ class ClientControllers extends Controller
             'fname'         => 'required|string',
             'lname'         => 'required|string',
             'email'         => 'required|email',
-            'contact'       => 'required|numeric|unique:appointments',
+            'contact'       => 'required|numeric|unique:appointments|starts_with:09',
             'branches_id'   => 'required|exists:branches,id',
             'doctors_id'    => 'required|exists:doctors,id',
             'services_id'   => 'required|exists:services,id',
@@ -37,24 +37,19 @@ class ClientControllers extends Controller
 
         $code = rand(1111,9999);
 
-        $now = Carbon::now('Asia/Manila');
+        $now = Carbon::now('Asia/Manila')->format('g:i A');
         $hrs = Carbon::now('Asia/Manila')->addHours(2);
-        $today = Carbon::today();
+        $today = Carbon::parse('today')->format('Y-m-d');
         $preftime = $request->time;
         $prefdate = $request->date;
-        
-    
-        if($preftime <= $hrs && $preftime <= $now){
+
+        if($preftime >= $hrs && $preftime <= $now){
             return response()->json([
                 'response'  => false,
                 'message'   => "Prefered time must be ahead of 2 hours before the appointment"
             ]);
-        }if($prefdate < $today){
-            return response()->json([
-                'response'  => false,
-                'message'   => "Prefered date not valid"
-            ]);
-        }else{    
+        }
+        elseif($prefdate >= $today){
         $insertClient = Appointment::create([
             'fname'         => $request->fname,
             'lname'         => $request->lname,
@@ -63,31 +58,32 @@ class ClientControllers extends Controller
             'branches_id'   => $request->branches_id,
             'doctors_id'    => $request->doctors_id,
             'services_id'   => $request->services_id,
-            'date'          => $request->date,
+            'date'          => $prefdate,
             'time'          => $preftime,
             'code'          => $code
         ]);
-        }
-
         if($insertClient){
-
-                // Nexmo::message()->send([
-                //     'to'   => '+639217215984',
-                //     'from' => '+639217215984',
-                //     'text' => 'Your verification code is:'. $code
-            
-                // ]);
-
+            Nexmo::message()->send([
+                'to'   => '+639217215984',
+                'from' => '+639217215984',
+                'text' => 'Your verification code is:'. $code
+        
+            ]);
             return response()->json([
-                'response' => true,
-                'message'  => "Success"
+            'response' => true,
+            'message'  => "Success"
             ],200);
-        }
-        else {
+        }else{
             return response()->json([
                 'response' => false,
                 'message'  => "Fail"
             ],200);
+        }
+        }else{
+            return response()->json([
+                'response'  => false,
+                'message'   => "Prefered date not valid"
+            ]);
         }
     }
 

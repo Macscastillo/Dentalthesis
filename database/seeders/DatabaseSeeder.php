@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
         			BranchSeeder::class,
         			DoctorSeeder::class,
                     PositionSeeder::class,
-                    TeethSeeder::class
+                    TeethSeeder::class,
+                    OwnerSeeder::class
         		]);
        
     }

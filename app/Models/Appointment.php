@@ -67,8 +67,9 @@ class Appointment extends Model
                 ->update([
                     'is_booked'     => 1, 
                     'is_cancelled'  => 0, 
-                    'is_active'     => 0, 
-                    'updated_by'    => Auth::user()->id]);
+                    'is_active'     => 0,
+                    'updated_by'    => Auth::user()->id
+                    ]);
     }
 
     public static function statusCancelled ($data){
@@ -78,7 +79,8 @@ class Appointment extends Model
                     'is_cancelled'  => 1, 
                     'is_booked'     => 0,
                     'is_active'     => 0, 
-                    'updated_by'    => Auth::user()->id]);
+                    'updated_by'    => Auth::user()->id
+                    ]);
                 
     }
 
