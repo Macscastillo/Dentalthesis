@@ -30,6 +30,7 @@ Route::get('Patient/{id}', [AdminControllers::class, 'ShowPatient'])->middleware
 Route::post('Patient/{id}/update', [AdminControllers::class, 'updatePatient'])->middleware('auth:api');
 Route::post('Patient/{id}/newrecord', [AdminControllers::class, 'newDentalrecord'])->middleware('auth:api');
 Route::post('Patient/{id}/existrecord', [AdminControllers::class, 'dentalRecord'])->middleware('auth:api');
+Route::get('Patient/{id}/dentalrecord', [AdminControllers::class, 'showdentalrecord'])->middleware('auth:api');
 
 
 //Drop downs

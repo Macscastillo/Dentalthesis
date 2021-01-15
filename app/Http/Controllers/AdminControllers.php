@@ -689,6 +689,24 @@ class AdminControllers extends Controller
         }
         }
     }
+
+    public function showdentalrecord(Request $request){
+
+        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2 || Auth::user()->positions_id == 3){
+        return $getalldentalreccord = DB::table('medical_records as mr')
+        ->select(
+            'mr.id',
+            'teeth.name as Teeth#',
+            'service.name as Procedure',
+            'mr.amount as Amount',
+            'mr.paid as Paid',
+            'mr.balance as Remaining Balance')
+        ->join('teeth_codes as teeth','mr.teeths_id','=', 'teeth.id')
+        ->join('services as service', 'mr.services_id','=','service.id')
+        ->where('patient_id','=', $request->id)
+        ->get()->reverse();
+    }
+}
         public function ShowAllPatient(Request $request){
 
             if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2 || Auth::user()->positions_id == 3){
