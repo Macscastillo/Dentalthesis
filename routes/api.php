@@ -9,8 +9,6 @@ use App\Http\Controllers\DropdownControllers;
 
 //Client
 Route::post('BookAppointment', [ClientControllers::class, 'setAppointment']);
-//eto yung api ng verification code. need mo gumawa ng text field na pwedeng paglagyan ng code ni client
-//ikaw na bahala kung ano deskarte mo kung pop up ba to or marere-direct sila sa isang page.
 Route::get('BookAppointment', [ClientControllers::class, 'verificationCode']);
 
 //Admin
@@ -32,6 +30,8 @@ Route::post('Patient/{id}/newrecord', [AdminControllers::class, 'newDentalrecord
 Route::post('Patient/{id}/existrecord', [AdminControllers::class, 'dentalRecord'])->middleware('auth:api');
 Route::get('Patient/{id}/dentalrecord', [AdminControllers::class, 'showdentalrecord'])->middleware('auth:api');
 
+//Email
+Route::post('email', [AdminControllers::class, 'sendEmail']);
 
 //Drop downs
 Route::get('Services', [DropdownControllers::class, 'services']);

@@ -16,6 +16,7 @@ use Hash;
 use DB;
 use Carbon\Carbon;
 use Nexmo;
+use Mail;
 
 class AdminControllers extends Controller
 {
@@ -693,17 +694,17 @@ class AdminControllers extends Controller
     public function showdentalrecord(Request $request){
 
         if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2 || Auth::user()->positions_id == 3){
-        return $getalldentalreccord = DB::table('medical_records as mr')
-        ->select(
-            'mr.id',
-            'teeth.name as Teeth#',
-            'service.name as Procedure',
-            'mr.amount as Amount',
-            'mr.paid as Paid',
-            'mr.balance as Remaining Balance')
-        ->join('teeth_codes as teeth','mr.teeths_id','=', 'teeth.id')
-        ->join('services as service', 'mr.services_id','=','service.id')
-        ->where('patient_id','=', $request->id)
+            return $getalldentalreccord = DB::table('medical_records as mr')
+            ->select(
+                'mr.id',
+                'teeth.name as Teeth#',
+                'service.name as Procedure',
+                'mr.amount as Amount',
+                'mr.paid as Paid',
+                'mr.balance as Remaining Balance')
+            ->join('teeth_codes as teeth','mr.teeths_id','=', 'teeth.id')
+            ->join('services as service', 'mr.services_id','=','service.id')
+            ->where('patient_id','=', $request->id)
         ->get()->reverse();
     }
 }
@@ -787,6 +788,43 @@ class AdminControllers extends Controller
             ->get();
         }
         }
+
+        public function sendEmail(Request $request){
+
+ 
+        $validation = Validator::make($request->all(),[
+          'email'   => 'required|email',
+          'rate'    => 'required|numeric'  
+        ]);
+
+        if($validation->fails()){
+            $error = $validation->messages()->first();
+                return response()->json([
+                    'response' => 'false',
+                    'message'  => $error
+                ]);
+        }
+
+        $today = Carbon::parse('today')->format('M d, Y - l');
+
+        $data = [
+          'email'   => $request->email,
+          'service' => $request->service,
+          'rate'    => $request->rate,
+          'today'   => $today
+        ];
+
+        $sendmail = Mail::send('email-template', 
+            ['service'  => $request->service,
+            'rate'     => $request->rate,
+            'today'    => $today], 
+         
+            function($message) use ($data) {
+            $message->to($data['email'])
+            ->subject('Receipt');
+            });
+        }
+        
     }    
     
 
