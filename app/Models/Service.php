@@ -17,7 +17,7 @@ class Service extends Model
          return $services = DB::connection('mysql')
           ->table('services')
           ->select('services.id',
-          	'services.name')
+          	'services.name','services.price')
           ->get();
      }
 
