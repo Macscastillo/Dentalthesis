@@ -119,8 +119,8 @@ class AdminControllers extends Controller
 
             if($query){
                 Nexmo::message()->send([
-                    'to'   => '+639217215984',
-                    'from' => '+639217215984',
+                    'to'   => '+63 921 721 5984',
+                    'from' => '+63 921 721 5984',
                     'text' => 'Your appointment request is approved'
                 ]);
                 return response()->json([
@@ -144,8 +144,8 @@ class AdminControllers extends Controller
             $query = Appointment::statusCancelled($request);
             if($query){
                 Nexmo::message()->send([
-                    'to'   => '+639217215984',
-                    'from' => '+639217215984',
+                    'to'   => '+63 921 721 5984',
+                    'from' => '+63 921 721 5984',
                     'text' => 'Your appointment has been declined, please wait a call from the clinic to offer you another schedule'
                 ]);
                 return response()->json([

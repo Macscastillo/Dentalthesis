@@ -64,8 +64,8 @@ class ClientControllers extends Controller
         ]);
         if($insertClient){
             Nexmo::message()->send([
-                'to'   => '+639217215984',
-                'from' => '+639217215984',
+                'to'   => '+63 921 721 5984',
+                'from' => '+63 921 721 5984',
                 'text' => 'Your verification code is:'. $code
         
             ]);
