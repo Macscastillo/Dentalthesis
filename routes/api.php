@@ -9,13 +9,13 @@ use App\Http\Controllers\DropdownControllers;
 
 //Client
 Route::post('BookAppointment', [ClientControllers::class, 'setAppointment']);
-Route::get('BookAppointment', [ClientControllers::class, 'verificationCode']);
+Route::get('Verification', [ClientControllers::class, 'verificationCode']);
 
 //Admin
 Route::post('AdminLogin', [AdminControllers::class, 'login']);
 
-Route::middleware('auth:api')->get('user', function (Request $request){
-    return $request->user();
+Route::middleware('auth:api')->get('users', function (Request $request){
+    return $request->users();
 });
 
 Route::post('registerUser', [AdminControllers::class, 'addUser'])->middleware('auth:api');
