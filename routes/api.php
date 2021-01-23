@@ -9,7 +9,7 @@ use App\Http\Controllers\DropdownControllers;
 
 //Client
 Route::post('BookAppointment', [ClientControllers::class, 'setAppointment']);
-Route::get('Verification', [ClientControllers::class, 'verificationCode']);
+Route::get('BookAppointment', [ClientControllers::class, 'verificationCode']);
 
 //Admin
 Route::post('AdminLogin', [AdminControllers::class, 'login']);
