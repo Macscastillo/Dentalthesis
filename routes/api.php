@@ -14,8 +14,8 @@ Route::get('BookAppointment', [ClientControllers::class, 'verificationCode']);
 //Admin
 Route::post('AdminLogin', [AdminControllers::class, 'login']);
 
-Route::middleware('auth:api')->get('users', function (Request $request){
-    return $request->users();
+Route::middleware('auth:api')->get('user', function (Request $request){
+    return $request->user();
 });
 
 Route::post('registerUser', [AdminControllers::class, 'addUser'])->middleware('auth:api');
