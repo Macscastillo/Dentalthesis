@@ -213,10 +213,6 @@ class AdminControllers extends Controller
             'patient_occupation'                => 'required|string',
             'company_school'                    => 'required|string',
             'status'                            => 'required|string',
-            'parent_lname'                      => 'string',
-            'parent_fname'                      => 'string',
-            'relation'                          => 'string',
-            'parent_occupation'                 => 'string',
             
             'doc_name'                          => 'string',
             'specialty'                         => 'string',

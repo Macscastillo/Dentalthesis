@@ -21,7 +21,7 @@ class OwnerSeeder extends Seeder
             'lname' => 'owner',
             'midname' => 'owner',
             'school' => 'owner',
-            'email' => 'owner@gmail.com',
+            'email' => 'owner@owner.com',
             'password' => Hash::make('password'),
             'positions_id' => '1',
             'branches_id' => '1'
