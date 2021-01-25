@@ -31,10 +31,10 @@ class PatientInfos extends Migration
             $table->string('status');
 
 
-            $table->string('parent_fname');
-            $table->string('parent_lname');
-            $table->string('relation');
-            $table->string('parent_occupation'); 
+            $table->string('parent_fname')->nullable();
+            $table->string('parent_lname')->nullable();
+            $table->string('relation')->nullable();
+            $table->string('parent_occupation')->nullable(); 
 
 
             $table->timestamps();

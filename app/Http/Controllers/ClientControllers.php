@@ -90,13 +90,13 @@ class ClientControllers extends Controller
     public function verificationCode(Request $request){
        
         if($request->code != ""){
-        $verifycode = DB::table('appointments')
-        ->where('code','=', $request->code )->exists();
+            $verifycode = DB::table('appointments')
+            ->where('code','=', $request->code )->exists();
 
-        $newcontact = DB::table('appointments as ap')
-        ->select('ap.contact')
-        ->where('code', '=', $request->code)
-        ->get();
+            $newcontact = DB::table('appointments as ap')
+            ->select('ap.contact')
+            ->where('code', '=', $request->code)
+            ->get();
 
             if($verifycode){
                 $activate = DB::table('appointments')
