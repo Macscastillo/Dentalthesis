@@ -19,6 +19,7 @@ class PatientInfos extends Migration
             $table->string('fname');
             $table->string('lname');
             $table->string('mname');
+            $table->string('email');
             $table->string('nickname');
             $table->string('address');
             $table->string('sex');

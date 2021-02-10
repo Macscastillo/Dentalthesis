@@ -203,6 +203,7 @@ class AdminControllers extends Controller
             'fname'                             => 'required|string',
             'lname'                             => 'required|string',
             'mname'                             => 'required|string',
+            'email'                             => 'required|email',
             'nickname'                          => 'string',
             'address'                           => 'required|string',
             'sex'                               => 'required|string',
@@ -286,6 +287,7 @@ class AdminControllers extends Controller
             'fname'                 => $request->fname,
             'lname'                 => $request->lname,
             'mname'                 => $request->mname,
+            'email'                 => $request->email,
             'nickname'              => $request->nickname,
             'address'               => $request->address,
             'sex'                   => $request->sex,
@@ -791,7 +793,6 @@ class AdminControllers extends Controller
 
  
         $validation = Validator::make($request->all(),[
-          'email'   => 'required|email',
           'rate'    => 'required|numeric'  
         ]);
 
@@ -803,10 +804,15 @@ class AdminControllers extends Controller
                 ]);
         }
 
+        $email = DB::table('patient_infos as patient')
+        ->select('patient.email')
+        ->where('patient.id','=',$request->id)
+        ->get();
+
         $today = Carbon::parse('today')->format('M d, Y - l');
 
         $data = [
-          'email'   => $request->email,
+          'email'   => $email[0]->email,
           'service' => $request->service,
           'rate'    => $request->rate,
           'today'   => $today
@@ -821,6 +827,11 @@ class AdminControllers extends Controller
             $message->to($data['email'])
             ->subject('Receipt');
             });
+
+            return response()->json([
+                'response'  => true,
+                'message'   => 'Email sent'
+            ]);
         }
         
     }    
