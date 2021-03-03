@@ -171,7 +171,7 @@ class AdminControllers extends Controller
 
             if($query){
                 return response()->json([
-                    'response'  =>true,
+                    'response'  =>'Booked',
                     'data'      =>$query
                 ],200);
             }else{
@@ -791,10 +791,11 @@ class AdminControllers extends Controller
 
         public function sendEmail(Request $request){
 
- 
-        $validation = Validator::make($request->all(),[
-          'rate'    => 'required|numeric'  
-        ]);
+        if(Auth::user()->positions_id == 1 || Auth::user()->positions_id == 2 || Auth::user()->positions_id == 3){
+           
+            $validation = Validator::make($request->all(),[
+            'rate'    => 'required|numeric'  
+            ]);
 
         if($validation->fails()){
             $error = $validation->messages()->first();
@@ -804,19 +805,19 @@ class AdminControllers extends Controller
                 ]);
         }
 
-        $email = DB::table('patient_infos as patient')
-        ->select('patient.email')
-        ->where('patient.id','=',$request->id)
-        ->get();
+            $email = DB::table('patient_infos as patient')
+            ->select('patient.email')
+            ->where('patient.id','=',$request->id)
+            ->get();
 
         $today = Carbon::parse('today')->format('M d, Y - l');
 
-        $data = [
-          'email'   => $email[0]->email,
-          'service' => $request->service,
-          'rate'    => $request->rate,
-          'today'   => $today
-        ];
+            $data = [
+            'email'   => $email[0]->email,
+            'service' => $request->service,
+            'rate'    => $request->rate,
+            'today'   => $today
+            ];
 
         $sendmail = Mail::send('email-template', 
             ['service'  => $request->service,
@@ -835,5 +836,5 @@ class AdminControllers extends Controller
         }
         
     }    
-    
+}
 

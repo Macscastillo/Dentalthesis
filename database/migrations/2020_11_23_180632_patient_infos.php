@@ -16,20 +16,20 @@ class PatientInfos extends Migration
         Schema::create('patient_infos', function (Blueprint $table) {
             
             $table->id();
-            $table->string('fname');
-            $table->string('lname');
-            $table->string('mname');
-            $table->string('email');
-            $table->string('nickname');
-            $table->string('address');
-            $table->string('sex');
-            $table->string('age');
-            $table->string('nationality');
-            $table->string('birthday');
-            $table->string('cellphone');
-            $table->string('patient_occupation');
-            $table->string('company_school');
-            $table->string('status');
+            $table->string('fname')->nullable();
+            $table->string('lname')->nullable();
+            $table->string('mname')->nullable();
+            $table->string('email')->nullable();
+            $table->string('nickname')->nullable();
+            $table->string('address')->nullable();
+            $table->string('sex')->nullable();
+            $table->string('age')->nullable();
+            $table->string('nationality')->nullable();
+            $table->string('birthday')->nullable();
+            $table->string('cellphone')->nullable();
+            $table->string('patient_occupation')->nullable();
+            $table->string('company_school')->nullable();
+            $table->string('status')->nullable();
 
 
             $table->string('parent_fname')->nullable();
