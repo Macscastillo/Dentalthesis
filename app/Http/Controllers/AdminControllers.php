@@ -827,7 +827,8 @@ class AdminControllers extends Controller
          
             function($message) use ($data) {
             $message->to($data['email'])
-            ->subject('Receipt');
+            ->subject('Receipt')
+            ->from('docrazeldentalstudio@gmail.com');
             });
 
             return response()->json([
