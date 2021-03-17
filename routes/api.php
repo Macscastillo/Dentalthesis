@@ -31,7 +31,7 @@ Route::get('Booked', [AdminControllers::class, 'bookedAppointments'])->middlewar
 Route::post('Addpatient', [AdminControllers::class, 'addPatient'])->middleware('auth:api');
 Route::get('Patient', [AdminControllers::class, 'ShowAllPatient'])->middleware('auth:api');
 Route::get('Patient/{id}', [AdminControllers::class, 'ShowPatient'])->middleware('auth:api');
-Route::post('email', [AdminControllers::class, 'sendEmail'])->middleware('auth:api');  
+Route::post('Patient/{id}/email', [AdminControllers::class, 'sendEmail'])->middleware('auth:api');  
 Route::post('Patient/{id}/update', [AdminControllers::class, 'updatePatient'])->middleware('auth:api');
 Route::post('Patient/{id}/newrecord', [AdminControllers::class, 'newDentalrecord'])->middleware('auth:api');
 Route::post('Patient/{id}/existrecord', [AdminControllers::class, 'dentalRecord'])->middleware('auth:api');
