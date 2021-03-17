@@ -39,12 +39,12 @@ class MedicalhistoryInfos extends Migration
             $table->boolean('is_aspirin')->default(0); //question 8
             $table->boolean('is_latex')->default(0); //question 8
             $table->boolean('is_antibiotics')->default(0); //question 8
-            $table->string('q9'); //question 9
+            $table->string('q9')->nullable(); //question 9
             $table->boolean('is_pregnant')->default(0);
             $table->boolean('is_nursing')->default(0);
             $table->boolean('is_taking_bc')->default(0); //bc = Birth Controll
-            $table->string('q11'); //question 11
-            $table->string('q12'); //question 12
+            $table->string('q11')->nullable(); //question 11
+            $table->string('q12')->nullable(); //question 12
 
             $table->boolean('is_high_blood_pressure')->default(0);
             $table->boolean('is_Low_blood_pressure')->default(0);
