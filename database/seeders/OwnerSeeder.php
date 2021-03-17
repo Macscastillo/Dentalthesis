@@ -20,7 +20,6 @@ class OwnerSeeder extends Seeder
             'fname' => 'owner',
             'lname' => 'owner',
             'midname' => 'owner',
-            'school' => 'owner',
             'email' => 'owner@owner.com',
             'password' => Hash::make('password'),
             'positions_id' => '1',
