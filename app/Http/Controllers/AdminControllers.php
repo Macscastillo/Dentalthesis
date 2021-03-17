@@ -204,7 +204,7 @@ class AdminControllers extends Controller
             'lname'                             => 'required|string',
             'mname'                             => 'required|string',
             'email'                             => 'required|email',
-            'nickname'                          => 'string',
+            'nickname'                          => 'nullable',
             'address'                           => 'required|string',
             'sex'                               => 'required|string',
             'age'                               => 'required|numeric',
@@ -215,19 +215,19 @@ class AdminControllers extends Controller
             'company_school'                    => 'required|string',
             'status'                            => 'required|string',
             
-            'doc_name'                          => 'string',
-            'specialty'                         => 'string',
-            'office_address'                    => 'string',
-            'office_number'                     => 'string',
+            'doc_name'                          => 'nullable|string',
+            'specialty'                         => 'nullable|string',
+            'office_address'                    => 'nullable|string',
+            'office_number'                     => 'nullable|string',
             'q1'                                => 'boolean',
             'q2'                                => 'boolean',
-            'sq2'                               => 'string',
+            'sq2'                               => 'nullable|string',
             'q3'                                => 'boolean',
-            'sq3'                               => 'string',
+            'sq3'                               => 'nullable|string',
             'q4'                                => 'boolean',
-            'sq4'                               => 'string',
+            'sq4'                               => 'nullable|string',
             'q5'                                => 'boolean',
-            'sq5'                               => 'string',
+            'sq5'                               => 'nullable|string',
             'q6'                                => 'boolean',
             'q7'                                => 'boolean',
             'is_local_anesthetic'               => 'boolean',
@@ -235,9 +235,9 @@ class AdminControllers extends Controller
             'is_aspirin'                        => 'boolean',
             'is_latex'                          => 'boolean',
             'is_antibiotics'                    => 'boolean',
-            'q9'                                => 'string',
-            'q11'                               => 'string',
-            'q12'                               => 'string',
+            'q9'                                => 'nullable|string',
+            'q11'                               => 'nullable|string',
+            'q12'                               => 'nullable|string',
             'is_high_blood_pressure'            => 'boolean',
             'is_Low_blood_pressure'             => 'boolean',
             'is_epilepsy'                       => 'boolean',
@@ -810,7 +810,7 @@ class AdminControllers extends Controller
             ->where('patient.id','=',$request->id)
             ->get();
 
-        $today = Carbon::parse('today')->format('M d, Y - l');
+            $today = Carbon::parse('today')->format('M d, Y - l');
 
             $data = [
             'email'   => $email[0]->email,

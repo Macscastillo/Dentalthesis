@@ -19,7 +19,6 @@ class Users extends Migration
             $table->string('fname');
             $table->string('lname');
             $table->string('midname');
-            $table->string('school');
             $table->string('email');
             $table->string('password');
 
