@@ -389,6 +389,7 @@ class AdminControllers extends Controller
             'patient.fname as First_name',
             'patient.mname as Middle_name',
             'patient.lname as Last_name',
+            'patient.email as Email',
             'patient.nickname as Nickname',
             'patient.address as Address',
             'patient.sex as Sex',
